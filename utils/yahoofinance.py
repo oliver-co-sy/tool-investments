@@ -2,12 +2,27 @@ from collections import namedtuple
 from datetime import datetime
 import yfinance as yf
 
-StockData = namedtuple("StockData", [
-    "symbol", "long_name", "ex_dividend_date", "last_dividend_payment_date", "last_dividend_amount",
-    "dividend_frequency", "fifty_two_week_low", "fifty_two_week_high", "trailing_pe", "forward_pe",
-    "trailing_eps", "forward_eps", "book_value", "price_to_book_ratio", "price_target_mean", "price_target_median",
-    "analyst_recommendation"
-])
+StockData = namedtuple(
+    "StockData", [
+        "symbol",
+        "long_name",
+        "ex_dividend_date",
+        "last_dividend_payment_date",
+        "last_dividend_amount",
+        "dividend_frequency",
+        "fifty_two_week_low",
+        "fifty_two_week_high",
+        "trailing_pe",
+        "forward_pe",
+        "trailing_eps",
+        "forward_eps",
+        "book_value",
+        "price_to_book_ratio",
+        "price_target_mean",
+        "price_target_median",
+        "analyst_recommendation"
+    ]
+)
 
 
 def get_stock_data(symbols):
@@ -38,8 +53,6 @@ def _get(dictionary, key, converter=None, default=None):
         value = dictionary[key]
         if converter is not None:
             return converter(value)
-    except KeyError:
+        return value
+    except KeyError as e:
         return default
-
-
-print(get_stock_data(["ry.to td.to bns.to bmo.to cm.to na.to"]))
