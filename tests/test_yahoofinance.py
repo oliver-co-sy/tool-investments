@@ -1,11 +1,15 @@
-from utils import get_stock_data
+from utils import get_stock_data, GoogleFinanceFieldFormatter
 
-stock_data = get_stock_data([
-    "TD.TO",
-    "RY.TO",
-    "BMO.TO"
-])
+stock_data = get_stock_data(
+    symbols=[
+        "TD.TO",
+        "RY.TO",
+        "BMO.TO"
+    ], formatter_cls=GoogleFinanceFieldFormatter)
 print(stock_data)
 
-stock_data = get_stock_data(["SRV-UN.TO"])
+stock_data = get_stock_data(
+    symbols=[
+        "SRV-UN.TO"
+    ], formatter_cls=GoogleFinanceFieldFormatter)
 print(stock_data)
