@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from datetime import datetime
 
-from utils import StockData, GoogleSheets, get_stock_data
+from utils import StockData, GoogleFinanceFieldFormatter, GoogleSheets, get_stock_data
 
 parser = ArgumentParser(
     prog="stockloader.py",
@@ -26,7 +26,10 @@ parser.add_argument(
 args = parser.parse_args()
 
 print(f"Retrieving data for stock symbols - {args.symbols} ...")
-stock_data = get_stock_data(args.symbols)
+stock_data = get_stock_data(
+    symbols=args.symbols,
+    formatter_cls=GoogleFinanceFieldFormatter
+)
 
 print(f"Loading stock data to Google Sheets ...")
 sheet = GoogleSheets(

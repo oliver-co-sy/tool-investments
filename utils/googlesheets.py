@@ -37,7 +37,7 @@ class GoogleSheets:
                     "green": 211,
                     "blue": 211
                 },
-                "fontSize": 12,
+                "fontSize": 10,
                 "bold": True
             }
         })
@@ -45,7 +45,7 @@ class GoogleSheets:
     def set_records(self, records):
         if not records:
             raise ValueError("Records are required")
-        self._worksheet.update("A3", records)
+        self._worksheet.update("A3", records, value_input_option="USER_ENTERED")
 
     def clear_records(self):
         self._worksheet.clear()
