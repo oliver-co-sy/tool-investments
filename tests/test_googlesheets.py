@@ -1,7 +1,7 @@
 from utils import GoogleSheets
 
-sheet = GoogleSheets(title="google-sheets-test", service_account_json_file="../key.json")
-
+sheet = GoogleSheets(service_account_json_file="../key.json")
+sheet.open(title="google-sheets-test")
 sheet.set_headers(["First Name", "Last Name", "Age"])
 sheet.set_records([
     ["Bruce", "Wayne", 25],
@@ -27,7 +27,7 @@ sheet.clear_records()
 sheet.select_worksheet(title="Villains")
 sheet.delete_worksheet()
 
-sheet.new_spreadsheet(title="marvel-heroes", email="oliver.co.sy@gmail.com")
+sheet.new(title="marvel-heroes", email="oliver.co.sy@gmail.com")
 sheet.set_headers(["First Name", "Last Name", "Age"])
 sheet.set_records([
     ["Peter", "Parker", 17],

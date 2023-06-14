@@ -2,9 +2,18 @@ import gspread
 
 
 class GoogleSheets:
-    def __init__(self, title, service_account_json_file="key.json"):
+    def __init__(self, service_account_json_file="key.json"):
         self._client = gspread.service_account(service_account_json_file)
+        self._spreadsheet = None
+        self._worksheet = None
+
+    def open(self, title):
         self._spreadsheet = self._client.open(title)
+        self._worksheet = self._spreadsheet.sheet1
+
+    def new(self, title, email):
+        self._spreadsheet = self._client.create(title)
+        self._spreadsheet.share(email_address=email, perm_type="user", role="writer")
         self._worksheet = self._spreadsheet.sheet1
 
     def select_worksheet(self, title):
@@ -49,8 +58,3 @@ class GoogleSheets:
 
     def clear_records(self):
         self._worksheet.clear()
-
-    def new_spreadsheet(self, title, email):
-        self._spreadsheet = self._client.create(title)
-        self._spreadsheet.share(email_address=email, perm_type="user", role="writer")
-        self._worksheet = self._spreadsheet.sheet1
