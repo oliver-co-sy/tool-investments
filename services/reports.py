@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 from utils import \
     GoogleSheets, \
+    GoogleSheetsFormulaGenerator, \
     get_stock_data, \
-    google_finance_price_formula, \
     log
 
 
@@ -12,6 +12,7 @@ class Report(ABC):
         self._title = title
         self._symbols = symbols
         self._headers = headers
+        self._formula_generator = GoogleSheetsFormulaGenerator(self._headers)
 
     def generate(self):
         log(f"Retrieving stock data for {self._symbols}...")
@@ -72,7 +73,7 @@ class NewReport(Report):
             [
                 record.symbol,
                 record.long_name,
-                google_finance_price_formula(record.symbol),
+                self._formula_generator.google_finance(record.symbol),
                 record.ex_dividend_date.strftime("%d-%b-%Y") if record.ex_dividend_date else None,
                 record.last_dividend_payment_date.strftime("%d-%b-%Y") if record.last_dividend_payment_date else None,
                 record.last_dividend_amount,
@@ -117,13 +118,23 @@ class UpdateStockReference(Report):
         return [
             [
                 record.symbol,
-                google_finance_price_formula(record.symbol),
+                self._formula_generator.google_finance(
+                    stock_symbol=record.symbol
+                ),
                 record.last_dividend_amount,
                 record.dividend_frequency,
-                record.last_dividend_amount * record.dividend_frequency,
-                (record.last_dividend_amount * record.dividend_frequency / record.current_price) * 100,
+                self._formula_generator.multiply(
+                    field_name_1="Dividend",
+                    field_name_2="Frequency",
+                    field_row=index + 1
+                ),
+                self._formula_generator.percentage(
+                    field_name_1="Annual Dividend",
+                    field_name_2="Current Price",
+                    field_row=index + 1
+                ),
                 record.ex_dividend_date.strftime("%d-%b-%Y") if record.ex_dividend_date else None,
                 record.last_dividend_payment_date.strftime("%d-%b-%Y") if record.last_dividend_payment_date else None
             ]
-            for record in stock_data
+            for index, record in enumerate(stock_data)
         ]

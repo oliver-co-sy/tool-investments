@@ -58,3 +58,38 @@ class GoogleSheets:
 
     def clear_records(self):
         self._worksheet.clear()
+
+
+class GoogleSheetsFormulaGenerator:
+    ROW_OFFSET = 2
+
+    def __init__(self, headers):
+        self._header_to_column = {
+            header.lower(): chr(65 + index).upper()
+            for index, header in enumerate(headers)
+        }
+
+    def google_finance(self, stock_symbol):
+        symbol_tokens = self._tokenize_stock_symbol(stock_symbol)
+        return f'=GOOGLEFINANCE("{symbol_tokens[2]}:{symbol_tokens[0]}", "price")'
+
+    def multiply(self, field_name_1, field_name_2, field_row, round_=2):
+        return f"=ROUND({self._cell(field_name_1, field_row)}*{self._cell(field_name_2, field_row)},{round_})"
+
+    def percentage(self, field_name_1, field_name_2, field_row, round_=2):
+        return f"=ROUND({self._cell(field_name_1, field_row)}/{self._cell(field_name_2, field_row)}*100,{round_})"
+
+    def _cell(self, field_name, row):
+        row += self.ROW_OFFSET
+        column = self._header_to_column[field_name.lower()]
+        return f"{column}{row}"
+
+    @staticmethod
+    def _tokenize_stock_symbol(stock_symbol):
+        if "." in stock_symbol:
+            index = stock_symbol.index(".")
+            prefix = stock_symbol[:index]
+            suffix = stock_symbol[index + 1:]
+            if suffix.upper() == "TO":
+                return prefix, suffix, "TSE"
+        return stock_symbol, None, "NYSE"
