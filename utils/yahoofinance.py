@@ -12,7 +12,8 @@ def get_stock_data(symbols):
             _get(ticker.info, "exDividendDate", converter=datetime.fromtimestamp),
             _get(ticker.info, "lastDividendDate", converter=datetime.fromtimestamp),
             _get(ticker.info, "lastDividendValue"),
-            4,
+            _frequency(_get(ticker.info, "lastDividendDate", converter=datetime.fromtimestamp),
+                       _get(ticker.info, "exDividendDate", converter=datetime.fromtimestamp)),
             _get(ticker.info, "fiftyTwoWeekLow"),
             _get(ticker.info, "fiftyTwoWeekHigh"),
             _get(ticker.info, "trailingPE"),
@@ -37,3 +38,10 @@ def _get(dictionary, key, converter=None):
         return value
     except KeyError as e:
         return None
+
+
+def _frequency(div_date, ex_div_date):
+    if div_date and ex_div_date and (
+            div_date.month + 1 == ex_div_date.month or div_date.month - 1 == ex_div_date.month):
+        return 12
+    return 4

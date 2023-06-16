@@ -39,10 +39,12 @@ class NewReport(Report):
         "Symbol",
         "Name",
         "Price",
-        "Ex-Dividend Date",
-        "Last Dividend Payment",
-        "Last Dividend Amount",
-        "Dividend Frequency",
+        "Div Amount",
+        "Div Freq",
+        "Annual Div",
+        "Div Yield",
+        "Ex-Div Date",
+        "Last Div Date",
         "52-Week Low",
         "52-Week High",
         "Trailing PE",
@@ -51,9 +53,9 @@ class NewReport(Report):
         "Forward EPS",
         "Book Value",
         "Price-to-Book",
-        "Price Target Mean",
-        "Price Target Median",
-        "Recommendation"
+        "Target Mean",
+        "Target Median",
+        "Comment"
     )
 
     def __init__(self, title, symbols, email):
@@ -74,10 +76,20 @@ class NewReport(Report):
                 record.symbol,
                 record.long_name,
                 self._formula_generator.google_finance(record.symbol),
-                record.ex_dividend_date.strftime("%d-%b-%Y") if record.ex_dividend_date else None,
-                record.last_dividend_payment_date.strftime("%d-%b-%Y") if record.last_dividend_payment_date else None,
                 record.last_dividend_amount,
                 record.dividend_frequency,
+                self._formula_generator.multiply(
+                    field_name_1="Div Amount",
+                    field_name_2="Div Freq",
+                    field_row=index + 1
+                ),
+                self._formula_generator.percentage(
+                    field_name_1="Annual Div",
+                    field_name_2="Price",
+                    field_row=index + 1
+                ),
+                record.ex_dividend_date.strftime("%d-%b-%Y") if record.ex_dividend_date else None,
+                record.last_dividend_payment_date.strftime("%d-%b-%Y") if record.last_dividend_payment_date else None,
                 record.fifty_two_week_low,
                 record.fifty_two_week_high,
                 record.trailing_pe,
@@ -90,7 +102,7 @@ class NewReport(Report):
                 record.price_target_median,
                 record.analyst_recommendation
             ]
-            for record in stock_data
+            for index, record in enumerate(stock_data)
         ]
 
 
