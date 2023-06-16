@@ -29,4 +29,8 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-NewReport(title=args.title, symbols=args.symbols, email=args.email).generate()
+NewReport(
+    title=args.title,
+    symbols=args.symbols,
+    email=args.email
+).generate()

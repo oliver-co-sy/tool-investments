@@ -21,5 +21,16 @@ parser.add_argument(
     help="Title of the Google Sheets to load the stock data to"
 )
 
+parser.add_argument(
+    "-w",
+    "--worksheet",
+    required=True,
+    help="Title of the worksheet to update"
+)
+
 args = parser.parse_args()
-UpdateStockReference(title=args.title, symbols=args.symbols).generate()
+UpdateStockReference(
+    title=args.title,
+    worksheet=args.worksheet,
+    symbols=args.symbols
+).generate()

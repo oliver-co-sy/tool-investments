@@ -59,7 +59,11 @@ class NewReport(Report):
     )
 
     def __init__(self, title, symbols, email):
-        super().__init__(title, symbols, self._HEADERS)
+        super().__init__(
+            title=title,
+            symbols=symbols,
+            headers=self._HEADERS
+        )
         self._email = email
 
     def create_spreadsheet(self):
@@ -118,12 +122,19 @@ class UpdateStockReference(Report):
         "Payable Date"
     )
 
-    def __init__(self, title, symbols):
-        super().__init__(title, symbols, self._HEADERS)
+    def __init__(self, title, worksheet, symbols):
+        super().__init__(
+            title=title,
+            symbols=symbols,
+            headers=self._HEADERS
+        )
+        self._worksheet = worksheet
 
     def create_spreadsheet(self):
         spreadsheet = super().create_spreadsheet()
         spreadsheet.open(self._title)
+        spreadsheet.select_worksheet(self._worksheet)
+        spreadsheet.clear_records()
         return spreadsheet
 
     def map_data(self, stock_data):

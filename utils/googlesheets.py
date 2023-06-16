@@ -19,7 +19,7 @@ class GoogleSheets:
     def select_worksheet(self, title):
         self._worksheet = self._spreadsheet.worksheet(title)
 
-    def add_worksheet(self, title, rows, cols):
+    def add_worksheet(self, title, rows=5, cols=5):
         self._worksheet = self._spreadsheet.add_worksheet(title, rows, cols)
 
     def delete_worksheet(self):
