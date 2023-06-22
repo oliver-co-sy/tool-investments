@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9-bookworm'
+            args '-u root'
+        }
+    }
 
     stages {
         stage("Checkout") {
@@ -10,11 +15,7 @@ pipeline {
 
         stage("Install Dependencies") {
             steps {
-                withDockerContainer('python:3.9-bookworm') {
-                    // sh "python3 -m venv .venv"
-                    // sh "source ./.venv/bin/activate"
-                    sh "sudo pip3 install -r requirements.txt"
-                }
+                sh "pip3 install -r requirements.txt"
             }
         }
     }
