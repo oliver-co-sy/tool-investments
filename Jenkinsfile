@@ -10,7 +10,7 @@ pipeline {
 
         stage("Install Dependencies") {
             steps {
-                withDockerContainer('python:3.9.17-alpine3.18') {
+                withDockerContainer('python:3.7-alpine') {
                     sh "python3 -m venv .venv"
                     sh "source ./.venv/bin/activate"
                     sh "sudo -H pip install -r requirements.txt"
