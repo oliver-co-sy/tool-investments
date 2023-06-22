@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'python:3.9-bookworm'
-            args '-u root'
+            // args '-u root'
         }
     }
 
