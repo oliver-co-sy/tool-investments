@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.12-rc-slim-bookworm'
+            image 'python:3.11-slim-bookworm'
             args '-u root:root'
         }
     }
