@@ -13,12 +13,20 @@ pipeline {
             }
         }
 
-        stage("Install Dependencies") {
+        stage("Copy Key") {
             steps {
-                sh "python3 -m venv .venv"
-                sh ". ./.venv/bin/activate"
-                sh "pip3 install -r requirements.txt"
+                withCredentials([file(credentialsId: 'GoogleSheetsKey', variable: 'KEY_PATH')]) {
+                    sh "cp ${KEY_PATH} ."
+                }
             }
         }
+
+        // stage("Install Dependencies") {
+        //     steps {
+        //         sh "python3 -m venv .venv"
+        //         sh ". ./.venv/bin/activate"
+        //         sh "pip3 install -r requirements.txt"
+        //     }
+        // }
     }
 }
