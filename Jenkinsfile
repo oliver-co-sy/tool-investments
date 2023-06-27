@@ -6,6 +6,12 @@ pipeline {
         }
     }
 
+    parameters {
+        string name: "SYMBOLS", description: "The stock symbols to query (separated by space)", trim: true
+        string name: "TITLE", description: "The title of the Google Sheet", trim: true
+        string name: "EMAIL", description: "The email address to share the report with", trim: true
+    }
+
     stages {
         stage("Checkout") {
             steps {
@@ -31,7 +37,7 @@ pipeline {
 
         stage("Run") {
             steps {
-                sh "python3 stockreport.py -s TD.TO RY.TO BMO.TO -t stock_today-062223 -e oliver.co.sy@gmail.com"
+                sh "python3 stockreport.py -s ${SYMBOLS} -t ${TITLE} -e ${EMAIL}"
             }
         }
     }
