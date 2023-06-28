@@ -64,34 +64,37 @@ pipeline {
         success {
             script {
                 if (params.JOB == "Generate Stock Report") {
-                    emailext 
+                    emailext(
                         from: "${env.FROM_EMAIL}",
                         to: "${params.EMAIL}",
                         recipientProviders: [buildUser()], 
                         subject: "Stock Report Generated - ${params.TITLE}",
                         mimeType: "text/plain",
                         body: "Generated stock report for the following symbols: ${params.SYMBOLS}"
+                    )
 
                 } else if (params.JOB == "Update Reference Stocks") {
-                    emailext 
+                    emailext(
                         from: "${env.FROM_EMAIL}",
                         recipientProviders: [buildUser()], 
                         subject: "Reference Stocks Updated - ${params.TITLE}/${params.WORKSHEET}",
                         mimeType: "text/plain",
                         body: "Updated the following reference stocks: ${params.SYMBOLS}"
+                    )
                 }
             }
         }
 
         failure {
             script {
-                emailext
+                emailext(
                     from: "${env.FROM_EMAIL}",
                     recipientProviders: [buildUser()],
                     subject: "${env.JOB_NAME} = Build #${env.BUILD_NUMBER} FAILURE",
                     mimeType: "text/html",
                     body: '${JELLY_SCRIPT, template="html"}',
                     attachLog: true
+                )
             }
         }
     }
