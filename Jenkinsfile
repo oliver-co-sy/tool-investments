@@ -86,16 +86,13 @@ pipeline {
         }
 
         failure {
-            script {
-                emailext(
-                    from: "${env.FROM_EMAIL}",
-                    recipientProviders: [buildUser()],
-                    subject: "${env.JOB_NAME} = Build #${env.BUILD_NUMBER} FAILURE",
-                    mimeType: "text/html",
-                    body: '${JELLY_SCRIPT, template="html"}',
-                    attachLog: true
-                )
-            }
+            emailext
+                from: "${env.FROM_EMAIL}",
+                recipientProviders: [buildUser()],
+                subject: "${env.JOB_NAME} = Build #${env.BUILD_NUMBER} FAILURE",
+                mimeType: "text/html",
+                body: '${JELLY_SCRIPT, template="html"}',
+                attachLog: true
         }
     }
 }
